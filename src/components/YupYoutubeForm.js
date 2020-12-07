@@ -12,8 +12,25 @@ const onSubmit = (values) => {
   console.log(values);
 };
 
+const validate = (values) => {
+  let errors = {};
+  if (!values.name) {
+    errors.name = 'Required';
+  }
+  if (!values.email) {
+    errors.email = 'Required';
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = 'Invalid email format';
+  }
+  if (!values.channel) {
+    errors.channel = 'Required';
+  }
+
+  return errors;
+};
+
 const validationSchema = Yup.object({
-  name: Yup.string().required('Your Name is Required'),
+  name: Yup.string().required('Name is Required'),
   email: Yup.string().email('Invalid email format').required('Required'),
   channel: Yup.string().required('Channel Name is Required'),
 });
@@ -38,7 +55,9 @@ function YoutubeForm(props) {
             type="text"
             id="name"
             name="name"
-            {...formik.getFieldProps('name')}
+            value={formik.values.name}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
           {formik.errors.name && formik.touched.name ? (
             <div className="error">{formik.errors.name}</div>
@@ -50,7 +69,9 @@ function YoutubeForm(props) {
             type="email"
             id="email"
             name="email"
-            {...formik.getFieldProps('email')}
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
           {formik.errors.email && formik.touched.email ? (
             <div className="error">{formik.errors.email}</div>
@@ -62,7 +83,9 @@ function YoutubeForm(props) {
             type="text"
             id="channel"
             name="channel"
-            {...formik.getFieldProps('channel')}
+            value={formik.values.channel}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
           />
           {formik.errors.channel && formik.touched.channel ? (
             <div className="error">{formik.errors.channel}</div>
