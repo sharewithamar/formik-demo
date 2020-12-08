@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Formik,
   Form,
@@ -25,8 +25,24 @@ const initialValues = {
   phNumbers: [''],
 };
 
-const onSubmit = (values) => {
-  console.log(values);
+const savedValues = {
+  name: 'Amarnath Rajasekaran',
+  email: 'sharewithamar@gmail.com',
+  channel: 'aoe',
+  commennts: '14',
+  address: '21 B',
+  social: {
+    facebook: '',
+    twitter: '',
+  },
+  phoneNumbers: ['', ''],
+  phNumbers: [''],
+};
+
+const onSubmit = (values, onSubmitProps) => {
+  // console.log(values);
+  // console.log('submit props', onSubmitProps);
+  onSubmitProps.setSubmitting(false);
 };
 
 const validationSchema = Yup.object({
@@ -45,6 +61,7 @@ const validateComments = (value) => {
 };
 
 function YoutubeForm(props) {
+  const [formValues, setFormValues] = useState(null);
   /*  const formik = useFormik({
     initialValues,
     onSubmit,
@@ -62,10 +79,11 @@ function YoutubeForm(props) {
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={formValues || initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       // validateOnMount
+      enableReinitialize
     >
       {(formik) => {
         console.log('formik prop', formik); // equivalent to form prop inside render options
@@ -112,7 +130,7 @@ function YoutubeForm(props) {
                 {(props) => {
                   //field,form,meta
                   //  console.log(props);
-                  console.log('form errors', props.form.errors);
+                  //    console.log('form errors', props.form.errors);
                   const { field, form, meta } = props;
                   return (
                     <div>
@@ -180,6 +198,7 @@ function YoutubeForm(props) {
                 }}
               </FieldArray>
             </div>
+            {/*
             <button
               type="button"
               onClick={() => formik.validateField('comments')}
@@ -208,7 +227,18 @@ function YoutubeForm(props) {
             >
               Visit Fields
             </button>
+           
             <button type="submit" disabled={!formik.isValid}>
+              Submit
+            </button>
+            */}
+            <button type="button" onClick={() => setFormValues(savedValues)}>
+              Load saved data
+            </button>
+            <button
+              type="submit"
+              disabled={!formik.isValid || formik.isSubmitting}
+            >
               Submit
             </button>
           </Form>
