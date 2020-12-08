@@ -5,6 +5,7 @@ import {
   Field,
   ErrorMessage,
   FieldArray,
+  FastField,
   useFormik,
 } from 'formik';
 import * as Yup from 'yup';
@@ -34,6 +35,15 @@ const validationSchema = Yup.object({
   channel: Yup.string().required('Channel Name is Required'),
   address: Yup.string().required('Your Address is Required'),
 });
+
+const validateComments = (value) => {
+  let error;
+  if (!value) {
+    error = 'Required comments';
+  }
+  return error;
+};
+
 function YoutubeForm(props) {
   /*  const formik = useFormik({
     initialValues,
@@ -45,6 +55,8 @@ function YoutubeForm(props) {
   // console.log('form values', formik.values);
   // console.log('form errors', formik.errors);
   //   console.log('Visisted fields', formik.touched);
+  //  validateOnChange={false}
+  // validateOnBlur = { false };
 
   return (
     <Formik
@@ -80,15 +92,21 @@ function YoutubeForm(props) {
 
         <div className="form-control">
           <label htmlFor="comments">Comments</label>
-          <Field as="textarea" id="comments" name="comments" />
-          <ErrorMessage name="comments" />
+          <Field
+            as="textarea"
+            id="comments"
+            name="comments"
+            validate={validateComments}
+          />
+          <ErrorMessage name="comments" component={TextError} />
         </div>
         <div className="form-control">
           <label htmlFor="address">Address</label>
-          <Field name="address">
+          <FastField name="address">
             {(props) => {
               //field,form,meta
               //  console.log(props);
+              console.log('form errors', props.form.errors);
               const { field, form, meta } = props;
               return (
                 <div>
@@ -97,7 +115,7 @@ function YoutubeForm(props) {
                 </div>
               );
             }}
-          </Field>
+          </FastField>
         </div>
 
         <div className="form-control">
