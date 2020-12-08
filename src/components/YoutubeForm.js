@@ -57,12 +57,15 @@ function YoutubeForm(props) {
   //   console.log('Visisted fields', formik.touched);
   //  validateOnChange={false}
   // validateOnBlur = { false };
+  //validateOnMount - runs validaiton on load
+  //formik.dirty  -Note if you set initial values and if you have same value then it is not dirty
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
+      // validateOnMount
     >
       {(formik) => {
         console.log('formik prop', formik); // equivalent to form prop inside render options
@@ -205,7 +208,9 @@ function YoutubeForm(props) {
             >
               Visit Fields
             </button>
-            <button type="submit">Submit</button>
+            <button type="submit" disabled={!formik.isValid}>
+              Submit
+            </button>
           </Form>
         );
       }}
